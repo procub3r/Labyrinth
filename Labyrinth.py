@@ -15,16 +15,23 @@ class NeuralNetwork:
         self.layers[0].activate(input)
         for i in range(1, len(self.layers)):
             self.layers[i].activate(self.layers[i - 1].activ)
-        print(self.layers[-1].activ)
+        # print(self.layers[-1].activ)
 
     def test(self, test_data):
         correct = 0
         for i in range(len(test_data)):
+            self.feedforward(test_data[i])
             if self.test_f(i, self.layers[-1].activ):
                 correct += 1
             print(f'Tested: {i + 1} / {len(test_data)}', end='\r')
         print(f'\nCorrect: {correct} / {len(test_data)}')
         print(f'Accuracy: {(correct / len(test_data)) * 100}%')
+
+    def set_routines(self, loss_f, d_loss_f, test_f=None):
+        self.loss_f = loss_f
+        self.d_loss_f = d_loss_f
+        Layer.d_loss_f = d_loss_f
+        self.test_f = test_f
 
     def train(self, train_data, train_labels, eta=1, epochs=100):
         for i in range(epochs):
@@ -37,3 +44,4 @@ class NeuralNetwork:
                 self.layers[-1].activ_gradient = self.d_loss_f(output, target)
                 for k in range(len(self.layers) - 1, 0, -1):
                     self.layers[k].tweak_params(self.layers[k - 1], eta)
+
