@@ -12,7 +12,8 @@ class Layer:
         self.activ_f, self.d_activ_func = Layer.activ_funcs[activ_f]
 
     def tweak_params(self, prev_layer, eta):
-        pass
+        Layer.d_loss_f(1, 1)  # proof of concept that you can run the function.
+        # Refer to the next commit to see how this function will be called ;)
 
     def activate(self, input):
         self.w_sum = (self.weight @ input) + self.bias
